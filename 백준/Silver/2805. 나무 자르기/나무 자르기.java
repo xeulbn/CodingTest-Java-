@@ -1,55 +1,50 @@
 import java.io.*;
 import java.util.*;
 
-
 public class Main {
+
     public static int n;
     public static int m;
-    public static int[] height;
-    public static int[] afterCut;
+    public static int[] tree;
 
+    public static void main(String[] args) throws IOException {
 
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st= new StringTokenizer(br.readLine());
 
-        int answer=0;
-        n=Integer.parseInt(st.nextToken());
-        m=Integer.parseInt(st.nextToken());
-        height=new int[n];
+        n= Integer.parseInt(st.nextToken());
+        m= Integer.parseInt(st.nextToken());
 
         st=new StringTokenizer(br.readLine());
-        for (int i=0; i<n;i++){
-            height[i]=Integer.parseInt(st.nextToken());
+        tree= new int[n];
+
+        for(int i=0;i<n;i++){
+            tree[i]= Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(height);
+        Arrays.sort(tree);
 
-        int low = 0;
-        int high= Arrays.stream(height).max().getAsInt();
+        int min = 0;
+        int max= tree[n-1];
 
-        while(low<=high){
-            int mid=(low+high)/2;
-            long sum = getCutSum(mid);
+        int answer=0;
+
+        while(min<=max){
+            int mid= (min+max)/2;
+
+            long sum=0;
+            for(int i=0;i<n;i++){
+                if(tree[i]>mid){
+                    sum+=tree[i]-mid;
+                }
+            }
 
             if(sum>=m){
                 answer=mid;
-                low=mid+1;
-            } else{
-                high=mid-1;
+                min=mid+1;
+            }else{
+                max=mid-1;
             }
         }
-
         System.out.println(answer);
-
-    }
-
-    public static long getCutSum(int tmp){
-        long sum=0;
-        for(int h: height){
-            if(h>tmp){
-                sum+=(h-tmp);
-            }
-        }
-        return sum;
     }
 }
