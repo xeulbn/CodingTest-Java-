@@ -1,0 +1,1 @@
+SELECT distinct ANIMAL_ID, NAME from ANIMAL_INS;
