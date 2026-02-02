@@ -1,33 +1,31 @@
-import java.util.*;
-import java.lang.*;
 import java.io.*;
+import java.util.*;
 
 class Main {
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(br.readLine());
 
-        int n= Integer.parseInt(st.nextToken());
+        int digits = String.valueOf(n).length();
+        int start = Math.max(0, n - 9 * digits);
+
         int answer = 0;
-        for(int i=0;i<n;i++){
-            if(checkIsProducer(i,n)){
-                answer=i;
+        for (int i = start; i < n; i++) {
+            if (isGenerator(i, n)) {
+                answer = i;
                 break;
             }
         }
         System.out.println(answer);
     }
 
-    public static boolean checkIsProducer (int x,int target){
-        int sum=0;
-        int total=x;
-        while(x>0){
-            sum=sum+x%10;
-            x=x/10;
+    private static boolean isGenerator(int x, int target) {
+        int sum = x;
+        int tmp = x;
+        while (tmp > 0) {
+            sum += tmp % 10;
+            tmp /= 10;
         }
-        if(total+sum==target){
-            return true;
-        }
-        return false;
+        return sum == target;
     }
 }
