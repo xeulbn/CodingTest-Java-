@@ -24,7 +24,7 @@ class Main {
     }
 
     public static int upperBound(int c){
-        int left = 1;
+        int left =1;
         int right = arr[arr.length-1]-arr[0];
         int answer=0;
 
@@ -42,17 +42,15 @@ class Main {
     }
 
     public static int canInstall(int mid){
-        int count =1;
-        int lastIndex=arr[0];
+        int cnt=1;
+        int lastIndex=0;
         
         for(int i=1;i<arr.length;i++){
-            int index=arr[i];
-
-            if(index-lastIndex >= mid){
-                count++;
-                lastIndex=index;
+            if(arr[i]-arr[lastIndex]>=mid){
+                cnt++;
+                lastIndex=i;
             }
         }
-        return count;
+        return cnt;
     }
 }
