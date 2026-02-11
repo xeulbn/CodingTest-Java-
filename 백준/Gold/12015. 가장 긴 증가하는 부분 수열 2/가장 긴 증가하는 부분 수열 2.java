@@ -14,37 +14,38 @@ class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n=Integer.parseInt(st.nextToken());
-        arr= new int[n];
-        lis = new int[n];
-        st=new StringTokenizer(br.readLine());
+        st= new StringTokenizer(br.readLine());
+        arr=new int[n];
+        lis=new int[n];
         for(int i=0;i<n;i++){
             arr[i]=Integer.parseInt(st.nextToken());
         }
 
         lis[0]=arr[0];
-        int lisLength = 1;
-        for(int i=1;i<arr.length;i++){
-            int key = arr[i];
-            
-            if(lis[lisLength-1]<key){
+        int lisLength=1;
+        for(int i=1;i<n;i++){
+            int key= arr[i];
+
+            if(key>lis[lisLength-1]){
                 lisLength++;
                 lis[lisLength-1]=key;
             }else{
-                int left=0;
-                int right=lisLength;
+                int left = 0;
+                int right= lisLength-1;
                 while(left<right){
                     int mid = (left+right)/2;
-
+                    
                     if(lis[mid]<key){
                         left=mid+1;
                     }else{
-                        right=mid;
+                        right= mid;
                     }
                 }
                 lis[left]=key;
             }
         }
         System.out.println(lisLength);
+        
     }
     
 }
