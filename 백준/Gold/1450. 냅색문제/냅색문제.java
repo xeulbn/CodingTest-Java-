@@ -6,73 +6,77 @@ import java.util.stream.*;
 class Main {
 
     public static int n;
-    public static int c;
-    public static int[] leftArr;
-    public static int[] rightArr;
-        
+    public static Long c;
+    public static int[] left;
+    public static int[] right;
+
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n=Integer.parseInt(st.nextToken());
-        c=Integer.parseInt(st.nextToken());
+        c=Long.parseLong(st.nextToken());
+
+        int mid = n / 2;
+        left = new int[mid];
+        right = new int[n - mid];
 
         st=new StringTokenizer(br.readLine());
-        int mid = n / 2;
-        leftArr = new int[mid];
-        rightArr = new int[n - mid];
-        
-        for (int i = 0; i < n; i++) {
+        for(int i=0;i<n;i++){
             int w = Integer.parseInt(st.nextToken());
-            if (i < mid) {
-                leftArr[i] = w;
-            }else {
-                rightArr[i - mid] = w;
+            if(i<mid){
+                left[i]=w;
+            }else{
+                right[i-mid]=w;
             }
         }
 
         ArrayList<Long> leftSums = new ArrayList<>();
         ArrayList<Long> rightSums = new ArrayList<>();
-        
-        makeSums(leftArr, 0, 0L, leftSums);
-        makeSums(rightArr, 0, 0L, rightSums);
+
+        makeSums(left, 0, 0L, leftSums);
+        makeSums(right, 0, 0L, rightSums);
 
         Collections.sort(rightSums);
-        
-        long answer = 0;
-        
-        for (long ls : leftSums) {
-            if (ls > c) continue;
-            long remain = c - ls;
 
-            int cnt = upperBound(rightSums, remain);
-            answer += cnt;
+        long answer=0;
+        for(long ls :leftSums){
+            if(ls>c){
+                continue;
+            }else{
+                long remain = c-ls;
+                int cnt = upperBound(rightSums,remain);
+
+                answer+=cnt;
+            }
         }
 
         System.out.println(answer);
-        
     }
 
-    static void makeSums(int[] arr, int idx, long sum, ArrayList<Long> sums) {
-        if (sum > c) 
+    public static void makeSums(int[] arr, int index, Long sum, ArrayList<Long> sums){
+        if(sum>c){
             return;
-        if (idx == arr.length) {
+        }
+        if(index==arr.length){
             sums.add(sum);
             return;
         }
-        makeSums(arr, idx + 1, sum, sums);
-        
-        makeSums(arr, idx + 1, sum + arr[idx], sums);
+
+        makeSums(arr, index + 1, sum, sums);
+        makeSums(arr, index+ 1, sum + arr[index], sums);
     }
 
-    static int upperBound(ArrayList<Long> list, long target) {
+    public static int upperBound(ArrayList<Long> list, long target){
         int low = 0;
-        int high = list.size(); 
+        int high = list.size();
+        
         while (low < high) {
-            int mid = (low + high) >>> 1;
+            int mid = (low + high)/2;
             if (list.get(mid) <= target) 
                 low = mid + 1;
-            else high = mid;
+            else 
+                high = mid;
         }
         return low;
     }
