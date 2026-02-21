@@ -7,38 +7,38 @@ class Main {
 
     public static int n;
     public static int[][] chess;
-    public static int count=0;
-
+    public static int answer=0;
 
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n=Integer.parseInt(st.nextToken());
-        chess=new int[n][n];
 
+        chess= new int[n][n];
         dfs(0);
 
-        System.out.println(count);
+        System.out.println(answer);
     }
 
-    public static void dfs(int depth){
-        if(depth==n){
-            count++;
+    public static void dfs(int row){
+        if(row==n){
+            answer++;
             return;
         }
-        for(int i=0;i<n;i++){
-            if(possible(depth,i)){
-                chess[depth][i]=1;
-                dfs(depth+1);
-                chess[depth][i]=0;
+
+        for(int col=0;col<n;col++){
+            if(isPossible(row,col)){
+                chess[row][col]=1;
+                dfs(row+1);
+                chess[row][col]=0;
             }
         }
     }
 
-    public static boolean possible(int row, int col){
-        for(int i=0;i<row;i++){
-            if(chess[i][col]==1){
+    public static boolean isPossible(int row, int col){
+        for(int r=0;r<row;r++){
+            if(chess[r][col]==1){
                 return false;
             }
         }
@@ -48,11 +48,13 @@ class Main {
                 return false;
             }
         }
+
         for(int r=row-1,c=col+1;r>=0&&c<n;r--,c++){
             if(chess[r][c]==1){
                 return false;
             }
         }
+
         return true;
     }
     
