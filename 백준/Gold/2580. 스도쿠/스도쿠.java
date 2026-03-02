@@ -3,94 +3,88 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
+    private static final int SUDOKU_ROW_SIZE = 9;
+    private static final int SUDOKU_COL_SIZE = 9;
+    public static int[][] sudoku;
+    public static List<int[]> empties = new ArrayList<>();
+    private static boolean solved= false;
 
-    public static int n;
-    public static int[][] sdoku;
-    public static ArrayList<int[]> empty = new ArrayList<>();
-    public static boolean solved=false;
-
+    
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
 
-        sdoku=new int[9][9];
-
-        for(int i=0;i<9;i++){
-            st=new StringTokenizer(br.readLine());
-            for(int j=0;j<9;j++){
-                sdoku[i][j]=Integer.parseInt(st.nextToken());
-                if(sdoku[i][j]==0){
-                    empty.add(new int[]{i,j});
+        sudoku=new int[SUDOKU_ROW_SIZE][SUDOKU_COL_SIZE];
+        for(int i=0;i<SUDOKU_ROW_SIZE;i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j=0;j<SUDOKU_COL_SIZE;j++){
+                sudoku[i][j]= Integer.parseInt(st.nextToken());
+                if(sudoku[i][j]== 0){
+                    empties.add(new int[]{i,j});
                 }
             }
         }
-
+        
         dfs(0);
 
-        StringBuilder sb= new StringBuilder();
-        for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++){
-                sb.append(sdoku[i][j]).append(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                sb.append(sudoku[r][c]).append(' ');
             }
-            sb.append("\n");
+            sb.append('\n');
         }
-        System.out.println(sb);
-
+        System.out.print(sb);
     }
-    
+
     public static void dfs(int index){
         if(solved){
             return;
         }
 
-        if(index==empty.size()){
+        if(index==empties.size()){
             solved=true;
             return;
         }
 
-        int[] pos = empty.get(index);
+        int[] pos = empties.get(index);
         int row = pos[0];
         int col = pos[1];
 
-        for(int num=1;num<=9;num++){
-            if(isValid(row,col,num)){
-                sdoku[row][col]=num;
+        for(int i=1;i<=9;i++){
+            if(isValid(row,col,i)){
+                sudoku[row][col]=i;
                 dfs(index+1);
-                if(solved)
+                if(solved){
                     return;
-                sdoku[row][col]=0;
+                }
+                sudoku[row][col]=0;
             }
         }
     }
 
-    public static boolean isValid(int row,int col, int num){
-        //row 체크
+    public static boolean isValid(int row, int col, int num){
         for(int x=0;x<9;x++){
-            if(sdoku[row][x]==num){
+            if(sudoku[row][x]==num){
                 return false;
             }
         }
 
-        //col 체크
-        for(int y=0;y<9;y++){
-            if(sdoku[y][col]==num){
+        for(int x=0;x<9;x++){
+            if(sudoku[x][col]==num){
                 return false;
             }
         }
 
-        // 9*9 체크
-        int smallRow = (row/3)*3;
-        int smallCol = (col/3)*3;
-
-        for(int i=smallRow;i<smallRow+3;i++){
-            for(int j=smallCol;j<smallCol+3;j++){
-                if(sdoku[i][j]==num){
+        int sr = (row/3)*3;
+        int sc = (col/3)*3;
+        
+        for(int i=sr;i<sr+3;i++){
+            for(int j=sc;j<sc+3;j++){
+                if(sudoku[i][j]==num)
                     return false;
-                }
             }
         }
 
         return true;
     }
-    
 }
