@@ -1,61 +1,62 @@
 import java.util.*;
 import java.lang.*;
 import java.io.*;
-import java.util.stream.*;
 
+// The main method must be in a class named "Main".
 class Main {
 
     public static int n;
+    public static int answer;
     public static int[][] chess;
-    public static int answer=0;
-
+    
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st= new StringTokenizer(br.readLine());
 
         n=Integer.parseInt(st.nextToken());
+        chess=new int[n][n];
 
-        chess= new int[n][n];
+        answer=0;
         dfs(0);
-
         System.out.println(answer);
     }
 
-    public static void dfs(int row){
-        if(row==n){
+
+    public static void dfs(int depth){
+        if(depth==n){
             answer++;
             return;
         }
 
         for(int col=0;col<n;col++){
-            if(isPossible(row,col)){
-                chess[row][col]=1;
-                dfs(row+1);
-                chess[row][col]=0;
+            if(isPossible(depth,col)){
+                chess[depth][col]=1;
+                dfs(depth+1);
+                chess[depth][col]=0;
             }
         }
     }
 
-    public static boolean isPossible(int row, int col){
-        for(int r=0;r<row;r++){
-            if(chess[r][col]==1){
+    public static boolean isPossible(int x, int y){
+        for(int i=0;i<x;i++){
+            if(chess[i][y]==1){
                 return false;
             }
         }
 
-        for(int r=row-1,c=col-1;r>=0&&c>=0;r--,c--){
-            if(chess[r][c]==1){
+        for(int i=x-1, j=y-1; i>=0&&j>=0 ; i--,j--){
+            if(chess[i][j]==1){
                 return false;
             }
         }
 
-        for(int r=row-1,c=col+1;r>=0&&c<n;r--,c++){
-            if(chess[r][c]==1){
+        for(int i=x-1,j=y+1;i>=0&&j<n;i--,j++){
+            if(chess[i][j]==1){
                 return false;
             }
         }
-
         return true;
     }
     
+
 }
