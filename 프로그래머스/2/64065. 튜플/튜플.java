@@ -2,31 +2,44 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String s) {
-        s = s.substring(2, s.length() - 2);
-        String[] sets = s.split("\\},\\{");
+        String[] element = s.split("[{}]");
+        List<String[]> groups = new ArrayList<>();
         
-        Arrays.sort(sets, (a, b) -> a.length() - b.length());
-        List<Integer> result = new ArrayList<>();
-        Set<Integer> seen = new HashSet<>();
+        for(String part : element){
+            if(part.isEmpty()||part.equals(",")){
+                continue;
+            }
+            String[] numbers = part.split(",");
+            groups.add(numbers);
+        }
+        Collections.sort(groups,new StringLengthComparator());
         
-        for (String set : sets) {
-            String[] numbers = set.split(",");
-
-            for (String num : numbers) {
-                int value = Integer.parseInt(num);
-
-                if (!seen.contains(value)) {
-                    seen.add(value);
-                    result.add(value);
+        int maxSize = groups.get(groups.size() - 1).length;
+        int[] answer = new int[maxSize];
+        
+        Set<String> compareSet = new HashSet<>();
+        int answerIdx = 0;
+        
+        for(int i=0;i<groups.size();i++){
+            String[] check = groups.get(i);
+            for(int idx=0;idx<check.length;idx++){
+                if(!compareSet.contains(check[idx])){
+                    answer[answerIdx]=Integer.parseInt(check[idx]);
+                    compareSet.add(check[idx]);
+                    answerIdx+=1;
                 }
             }
         }
         
-        int[] answer = new int[result.size()];
-        for (int i = 0; i < result.size(); i++) {
-            answer[i] = result.get(i);
-        }
         
         return answer;
+        
+    }
+}
+
+class StringLengthComparator implements Comparator<String[]> {
+    @Override
+    public int compare(String[] s1, String[] s2) {
+        return Integer.compare(s1.length, s2.length);
     }
 }
