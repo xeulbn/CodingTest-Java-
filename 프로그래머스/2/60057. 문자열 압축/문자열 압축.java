@@ -4,44 +4,35 @@ class Solution {
     public int solution(String s) {
         int curMinValue = s.length();
         
-        for(int size =1; size<=s.length()/2;size++){
-            int compressedSize = calculateSize(s,size);
-            curMinValue = Math.min(curMinValue,compressedSize);
+        for(int i=1;i<=s.length()/2;i++){
+            int pressedSize = calculatePressedSize(s,i);
+            curMinValue = Math.min(curMinValue,pressedSize);
         }
         
         return curMinValue;
     }
-    
-    private int calculateSize(String s, int size) {
+
+    private int calculatePressedSize(String str, int size){
         StringBuilder result = new StringBuilder();
-
-        String prev = s.substring(0, size);
+        String prev = str.substring(0,size);
         int count = 1;
-
-        for (int start=size; start < s.length(); start+=size) {
-            int end = Math.min(start + size, s.length());
-            String current = s.substring(start, end);
-
-            if (prev.equals(current)) {
-                // 1. 같은 조각이므로 반복 횟수 증가
-                count+=1;
-            } else {
-                // 2. 지금까지 센 묶음을 result에 추가
-                //    count가 2 이상일 때만 숫자를 붙이고,
-                //    prev는 항상 붙인다
-                
+        
+        for(int start=size;start<str.length();start+=size){
+            int end = Math.min(start+size,str.length());
+            String current = str.substring(start,end);
+            
+            if(prev.equals(current)){
+                count +=1;
+            }else{
                 if(count>=2){
                     result.append(count);
                 }
                 result.append(prev);
-                // 3. current를 새로운 prev로 설정하고 count 초기화
-                prev=current;
-                count =1;
+                prev = current;
+                count=1;
             }
         }
-
-        // 4. 마지막으로 세던 묶음도 result에 추가
-        if (count >= 2) {
+        if(count>=2){
             result.append(count);
         }
         result.append(prev);
