@@ -1,32 +1,22 @@
 class Solution {
-    int[] numbers;
-    int target;
-    int answer;
+    
+    private static int wayToMake=0;
     
     public int solution(int[] numbers, int target) {
-        answer=0;
-        this.numbers =numbers;
-        this.target=target;
-
-
-        dfs(0,0);
-        return answer;
+        wayToMake = 0;
+        dfs(numbers,target,0,0);
+        return wayToMake;
     }
     
-    void dfs(int index, int sum){
-
-        //1.탈출 조건
-
-        //2. 수행 동작
-
-        if(index==numbers.length){
-            if(sum==target){
-                answer++;
+    private void dfs(int[] map, int target,int index, int current){
+        if (index == map.length) {
+            if (target == current) {
+                wayToMake++;
             }
             return;
         }
-
-        dfs(index+1,sum+numbers[index]);
-        dfs(index+1,sum-numbers[index]);
+        
+        dfs(map, target, index+1, current+map[index]);
+        dfs(map, target, index+1, current-map[index]);
     }
 }
