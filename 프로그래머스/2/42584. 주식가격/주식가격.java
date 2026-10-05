@@ -1,26 +1,20 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 class Solution {
-        public int[] solution(int[] prices) {
-            int[] answer = new int[prices.length];
-            Stack<Integer> priceStack = new Stack<>();
-
-            for(int i=0;i<prices.length;i++){
-                while(!priceStack.isEmpty() && prices[priceStack.peek()]>prices[i]){
-                    answer[priceStack.peek()]=i-priceStack.peek();
-                    priceStack.pop();
-                }
-                priceStack.push(i);
-            }
-
-            while(!priceStack.isEmpty()){
-                answer[priceStack.peek()]=prices.length-priceStack.peek()-1;
-                priceStack.pop();
-            }
-
-            return answer;
-
+    public int[] solution(int[] prices) {
+        int[] answer = new int[prices.length];
+        for(int i=0;i<prices.length;i++){
+            answer[i]=comparePrices(i,prices);
         }
+        return answer;
     }
+    
+    private int comparePrices(int start, int[] prices){
+        for(int i=start+1;i<prices.length;i++){
+            if(prices[start]>prices[i]){
+                return i-start;
+            }
+        }
+        return prices.length-1-start;
+    }
+}
