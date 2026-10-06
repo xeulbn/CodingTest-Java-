@@ -1,31 +1,27 @@
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
+
+
 class Solution {
     public int solution(String[][] clothes) {
-        int answer = 0;
-        HashMap<String, Integer> map = new HashMap<>();
-        String[] str = new String[clothes.length];
+        Map<String, List<String>> clothMap = new HashMap<>();
+        
+        for(int i=0;i<clothes.length;i++){
+            String[] cloth=clothes[i];
+            String name = cloth[0];
+            String sort = cloth[1];
+            
+            List<String> names = clothMap.getOrDefault(sort, new ArrayList<>());
+            names.add(name);
+            clothMap.put(sort, names);
+        }
+        
+        int clothSortCnt = 1;
 
-        for (int i = 0; i < clothes.length; i++) {
-            str[i] = clothes[i][1];
-            if (map.get(clothes[i][1]) == null) {
-                map.put(clothes[i][1], 1);
-            }
-
-            else if (map.get(clothes[i][1]) != null) {
-                map.put(clothes[i][1], map.get(clothes[i][1])+1);
-            }
+        for (String str : clothMap.keySet()) {
+            int tmpCnt = clothMap.get(str).size();
+            clothSortCnt *= (tmpCnt+1);
         }
 
-        String[] str2 =  Arrays.stream(str).distinct().toArray(String[]::new);
-
-        int value = 1;
-        for (int i = 0; i < str2.length; i++) {
-            value *= (map.get(str2[i])+1);
-        }
-
-        answer = value -1;
-
-        return answer;
+        return clothSortCnt - 1;
     }
 }
