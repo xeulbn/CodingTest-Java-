@@ -1,45 +1,45 @@
 import java.util.*;
 
 class Solution {
+    
+    private static Set<Integer> compare;
+    
     public int[] solution(String s) {
-        String[] element = s.split("[{}]");
-        List<String[]> groups = new ArrayList<>();
+        String[] str = s.split("[{}]");
+        List<int[]> tuple = new ArrayList<>();
+        compare = new HashSet<>();
         
-        for(String part : element){
-            if(part.isEmpty()||part.equals(",")){
+        Arrays.sort(str,(a,b)->a.length()-b.length());
+        for(int i=0;i<str.length;i++){
+            if(str[i].isEmpty() || str[i].equals(",")){
                 continue;
             }
-            String[] numbers = part.split(",");
-            groups.add(numbers);
+            String[] parts = str[i].split(",");
+            int[] tmp = new int[parts.length];
+
+            for (int j = 0; j < parts.length; j++) {
+                tmp[j] = Integer.parseInt(parts[j]);
+            }
+
+            tuple.add(tmp);
         }
-        Collections.sort(groups,new StringLengthComparator());
         
-        int maxSize = groups.get(groups.size() - 1).length;
-        int[] answer = new int[maxSize];
+        int[] answer =findTuple(tuple);
         
-        Set<String> compareSet = new HashSet<>();
-        int answerIdx = 0;
+        return answer;
+    }
+    
+    private int[] findTuple(List<int[]> numbers){
+        List<Integer> returnValue = new ArrayList<>();
         
-        for(int i=0;i<groups.size();i++){
-            String[] check = groups.get(i);
-            for(int idx=0;idx<check.length;idx++){
-                if(!compareSet.contains(check[idx])){
-                    answer[answerIdx]=Integer.parseInt(check[idx]);
-                    compareSet.add(check[idx]);
-                    answerIdx+=1;
+        for(int[] num : numbers){
+            for(int i=0;i<num.length;i++){
+                if(!compare.contains(num[i])){
+                    compare.add(num[i]);
+                    returnValue.add(num[i]);
                 }
             }
         }
-        
-        
-        return answer;
-        
-    }
-}
-
-class StringLengthComparator implements Comparator<String[]> {
-    @Override
-    public int compare(String[] s1, String[] s2) {
-        return Integer.compare(s1.length, s2.length);
+        return returnValue.stream().mapToInt(Integer::intValue).toArray();
     }
 }
