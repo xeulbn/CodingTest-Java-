@@ -1,27 +1,27 @@
 import java.util.*;
 
 class Solution {
-    
-    private static int canGoMaxCnt = 0;
+
     private static boolean[] visited;
     
     public int solution(int k, int[][] dungeons) {
-        visited= new boolean[dungeons.length];
+        visited=new boolean[dungeons.length];
         int answer = dfs(k,dungeons,0);
         return answer;
     }
     
-    private int dfs(int currentP, int [][] map, int depth){
-        canGoMaxCnt = Math.max(canGoMaxCnt, depth);
-        
+    private int dfs(int k, int[][] map,int visitCnt){
+        int maxVisitCnt = visitCnt;
         for(int i=0;i<map.length;i++){
-            if(visited[i]||currentP<map[i][0]){
+            if(visited[i]||map[i][0]>k){
                 continue;
             }
             visited[i]=true;
-            dfs(currentP-map[i][1],map,depth+1);
+            int result = dfs(k-map[i][1],map,visitCnt+1);
+            maxVisitCnt = Math.max(maxVisitCnt, result);
             visited[i]=false;
         }
-        return canGoMaxCnt;
+        return maxVisitCnt;
+        
     }
 }
